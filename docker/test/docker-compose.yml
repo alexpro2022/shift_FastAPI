@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  db_test:
+    container_name: db_test
+    image: postgres:15.1-alpine
+    volumes:
+      - /var/lib/postgresql/data/
+    environment:
+      # - POSTGRES_DB=$POSTGRES_DB_TEST
+      # - POSTGRES_USER=$POSTGRES_USER_TEST
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD_TEST
+    expose:
+      - $DB_PORT
+
+  test:
+    container_name: test
+    build:
+      context: ../..
+      dockerfile: docker/test/Dockerfile
+    command: bash -c "pytest --cov --cov-config=.coveragerc"
+    depends_on:
+      - db_test
+    env_file:
+      - ../../.env

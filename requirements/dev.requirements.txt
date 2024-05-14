@@ -1,0 +1,12 @@
+aiosqlite
+alembic
+asyncpg
+email-validator
+fastapi
+fastapi-users[sqlalchemy]
+pydantic-settings
+SQLAlchemy
+uvicorn[standard]
+
+# To remove if no admin panel needed
+starlette-admin
