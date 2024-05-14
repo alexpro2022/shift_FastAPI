@@ -1,5 +1,8 @@
 # FastAPI template
 
+[![Test Suite](https://github.com/alexpro2022/shift_FastAPI/actions/workflows/branch_test.yml/badge.svg)](https://github.com/alexpro2022/shift_FastAPI/actions/workflows/branch_test.yml)
+[![codecov](https://codecov.io/gh/alexpro2022/shift_FastAPI/graph/badge.svg?token=3cGBirHlft)](https://codecov.io/gh/alexpro2022/shift_FastAPI)
+
 Проект развернут на удаленном сервере по адресу:<br>
 https://.duckdns.org/api/v1 <br>
 https://.duckdns.org/api/v2 <br>
