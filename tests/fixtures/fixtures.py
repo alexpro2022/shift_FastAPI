@@ -9,7 +9,7 @@ from app.models.base import Base as TestBase
 from .db_config import TestingSessionLocal, test_engine
 
 
-@pytest_asyncio.fixture  # (scope="session")  # autouse=True,
+@pytest_asyncio.fixture(scope="session")
 async def init_db() -> AsyncGenerator[Literal[True], Any]:
     async with test_engine.begin() as conn:
         await conn.run_sync(TestBase.metadata.create_all)

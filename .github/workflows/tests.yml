@@ -15,11 +15,8 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
-          #${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: postgrespw
-          #${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: github_actions
-          # DB_PORT: ${{ secrets.DB_PORT }}
         ports:
           - 5432:5432
     strategy:
@@ -40,11 +37,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/test.requirements.txt
       - name: Run Tests
-        #env:
-        #  DB: postgres
-        #  DB_HOST: ${{ secrets.DB_HOST_TEST }}
-        #  DB_PORT: 5432
-        #  DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           pytest --cov --cov-report=xml
       - name: Upload coverage reports to Codecov with GitHub Action
