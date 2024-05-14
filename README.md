@@ -79,8 +79,8 @@ docker --version && docker-compose --version
 Клонируйте репозиторий с GitHub и введите данные для переменных окружения (значения даны для примера, но их можно оставить):
 
 ```bash
-git clone https://github.com/
-cd
+git clone [https://github.com/](https://github.com/alexpro2022/shift_FastAPI.git)
+cd shift_FastAPI
 cp .env.example .env
 nano .env
 ```
@@ -142,7 +142,7 @@ docker compose -f docker/dev/docker-compose.yml --env-file .env down -v && docke
 ## Удаление приложения:
 Из корневой директории проекта выполните команду:
 ```bash
-cd .. && rm -fr
+cd .. && rm -fr shift_FastAPI
 ```
 
 [⬆️Оглавление](#оглавление)
