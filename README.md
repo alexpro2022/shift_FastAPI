@@ -79,7 +79,7 @@ docker --version && docker-compose --version
 Клонируйте репозиторий с GitHub и введите данные для переменных окружения (значения даны для примера, но их можно оставить):
 
 ```bash
-git clone [https://github.com/](https://github.com/alexpro2022/shift_FastAPI.git)
+git clone https://github.com/alexpro2022/shift_FastAPI.git
 cd shift_FastAPI
 cp .env.example .env
 nano .env
