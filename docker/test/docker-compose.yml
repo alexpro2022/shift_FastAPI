@@ -7,8 +7,8 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     environment:
-      # - POSTGRES_DB=$POSTGRES_DB_TEST
-      # - POSTGRES_USER=$POSTGRES_USER_TEST
+      - POSTGRES_DB=$DB_NAME_TEST
+      - POSTGRES_USER=$POSTGRES_USER_TEST
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD_TEST
     expose:
       - $DB_PORT

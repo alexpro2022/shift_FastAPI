@@ -49,7 +49,7 @@ https://.duckdns.org/api/v2 <br>
 [![Pytest](https://img.shields.io/badge/-Pytest-464646?logo=Pytest)](https://docs.pytest.org/en/latest/)
 [![Pytest-asyncio](https://img.shields.io/badge/-Pytest--asyncio-464646?logo=Pytest-asyncio)](https://pypi.org/project/pytest-asyncio/)
 [![pytest-cov](https://img.shields.io/badge/-pytest--cov-464646?logo=codecov)](https://pytest-cov.readthedocs.io/en/latest/)
-[![deepdiff](https://img.shields.io/badge/-deepdiff-464646?logo=deepdiff)](https://zepworks.com/deepdiff/6.3.1/diff.html)
+[![deepdiff](https://img.shields.io/badge/-deepdiff-464646?logo=deepdiff)](https://zepworks.com/deepdiff/7.0.1/)
 [![pre-commit](https://img.shields.io/badge/-pre--commit-464646?logo=pre-commit)](https://pre-commit.com/)
 
 [⬆️Оглавление](#оглавление)
@@ -93,7 +93,7 @@ nano .env
 Из корневой директории проекта выполните команду запуска тестов:
 ```bash
 docker compose -f docker/test/docker-compose.yml --env-file .env up --build --abort-on-container-exit && \
-docker compose -f docker/test/docker-compose.yml --env-file .env down -v
+docker compose -f docker/test/docker-compose.yml --env-file .env down -v && docker system prune -f
 ```
 После прохождения тестов в консоль будет выведен отчет pytest и coverage.
 

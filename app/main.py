@@ -4,10 +4,8 @@ from typing import Any, AsyncGenerator
 from config.app_config import app_conf
 from config.db_config import engine
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from user.admin import create_admin
 
-# from app.admin import admin
 from app.api.routers import main_router
 from app.models.base import Base
 
@@ -26,19 +24,3 @@ app = FastAPI(
 )
 
 app.include_router(main_router)
-# admin.mount_to(app)
-
-origins = [
-    "http://185.221.162.231",
-    "http://185.221.162.231:81",
-    "http://localhost",
-    "http://localhost:81",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)

@@ -1,4 +1,3 @@
-aiosqlite
 alembic
 asyncpg
 email-validator

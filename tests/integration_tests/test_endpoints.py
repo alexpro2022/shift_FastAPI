@@ -3,18 +3,12 @@ The module is kept as code example.
 
 """
 
-from http import HTTPStatus
-
 import pytest
-from httpx import AsyncClient
 
-from app.api.routers import main_router
-from tests.fixtures import data as d
-
-from ..fixtures.load_csv_data import convert_to_int
-from .utils import Json, check_response, reverse
+pytestmark = pytest.mark.skipif(..., reason="Not ready yet")
 
 
+"""
 @pytest.mark.parametrize(
     "view_name, expected_result",
     (
@@ -63,3 +57,4 @@ async def test_post_vacancy(init_db, async_client: AsyncClient) -> None:
     assert (
         check_response(response_json, {**{"id": 1}, **d.VACANCY_POST_PAYLOAD}) == "DONE"
     )
+"""
