@@ -1,11 +1,10 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi_users.exceptions import UserAlreadyExists
-from pydantic import EmailStr
-
 from config.app_config import app_conf
 from config.db_config import get_async_session
+from fastapi_users.exceptions import UserAlreadyExists
+from pydantic import EmailStr
 
 from .auth import get_user_manager
 from .db import User, get_user_db

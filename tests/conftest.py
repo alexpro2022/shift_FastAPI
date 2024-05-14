@@ -1,9 +1,9 @@
 from typing import AsyncGenerator
 
+from config.db_config import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.main import app
-from config.db_config import get_async_session
 
 from .fixtures.fixtures import TestingSessionLocal
 

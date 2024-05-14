@@ -6,6 +6,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 
 class Base(DeclarativeBase):
+    """Base DB model."""
+
     metadata = MetaData(
         naming_convention={
             "ix": "ix_%(column_0_label)s",
@@ -21,7 +23,9 @@ class Base(DeclarativeBase):
         return cls.__name__.lower()
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        UUID(as_uuid=True),  # to remove the redundancy
+        primary_key=True,
+        default=uuid.uuid4,
     )
 
     def __repr__(self) -> str:

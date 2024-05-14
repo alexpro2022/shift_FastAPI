@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator
 
+from config.app_config import app_conf
+from config.db_config import engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from user.admin import create_admin
@@ -8,8 +10,6 @@ from user.admin import create_admin
 # from app.admin import admin
 from app.api.routers import main_router
 from app.models.base import Base
-from config.app_config import app_conf
-from config.db_config import engine
 
 
 @asynccontextmanager
