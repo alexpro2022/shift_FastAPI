@@ -1,9 +1,8 @@
 from typing import Annotated, Any, AsyncGenerator
 
+from config.db_config import async_session
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
-from config.db_config import async_session
-
 from models.models import User
 
 

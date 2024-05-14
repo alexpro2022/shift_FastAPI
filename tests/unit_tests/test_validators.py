@@ -1,8 +1,8 @@
 import pytest
+from config.app_config import app_conf
 from fastapi_users import InvalidPasswordException
 
 from app.user.validators import password_content_validator, password_length_validator
-from config.app_config import app_conf
 from tests.utils import check_exception_info
 
 INVALID_CONTENT_MSG = "В пароле не должно содержаться e-mail."

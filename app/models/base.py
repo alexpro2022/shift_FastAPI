@@ -7,6 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
 class Base(DeclarativeBase):
     """Base DB model."""
+
     metadata = MetaData(
         naming_convention={
             "ix": "ix_%(column_0_label)s",

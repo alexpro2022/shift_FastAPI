@@ -1,6 +1,5 @@
-from fastapi_users import InvalidPasswordException
-
 from config.app_config import app_conf
+from fastapi_users import InvalidPasswordException
 
 
 def password_length_validator(password: str):

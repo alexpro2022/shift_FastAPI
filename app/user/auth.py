@@ -1,6 +1,7 @@
 import uuid
 from typing import Annotated
 
+from config.app_config import app_conf
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
 from fastapi_users.authentication import (
@@ -8,8 +9,6 @@ from fastapi_users.authentication import (
     BearerTransport,
     JWTStrategy,
 )
-
-from config.app_config import app_conf
 
 from .db import User, user_db
 from .schemas import UserCreate

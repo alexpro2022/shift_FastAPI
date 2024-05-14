@@ -1,6 +1,5 @@
-from fastapi import APIRouter
-
 from config.app_config import app_conf
+from fastapi import APIRouter
 
 from .auth import auth_backend, fastapi_users
 from .schemas import UserCreate, UserRead, UserUpdate
