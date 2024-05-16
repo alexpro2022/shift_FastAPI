@@ -37,7 +37,8 @@ def compare_lists(left: list, right: list) -> None:
 def check_exception_info(
     exc_info, expected_msg: str, expected_error_code: int | None = None
 ) -> None:
-    assert expected_msg in exc_info.value.args
+    # assert expected_msg in exc_info.value.args
+    assert expected_msg == str(exc_info)
     if expected_error_code is not None:
         assert expected_error_code in exc_info.value.args
 
