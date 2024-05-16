@@ -1,14 +1,30 @@
 from logging import Logger
 
 import pytest
+from fastapi_users.authentication import JWTStrategy
 from pydantic_core import ValidationError
 
 from app.config.app_config import app_conf
 from app.user.admin import create_admin, get_or_create_user
+from app.user.auth import get_jwt_strategy
 from app.user.db import User
 from tests.utils import USER_CREDS, check_user
 
-# pytestmark = pytest.mark.skipif(..., reason="Not ready yet")
+
+def test_get_jwt_startegy(monkeypatch):
+    mock_counter = 0
+
+    class MockJWTStrategy:
+        def __init__(self, secret, lifetime_seconds):
+            nonlocal mock_counter
+            assert secret == app_conf.secret_key
+            assert lifetime_seconds == app_conf.token_lifetime
+            mock_counter += 1
+
+    assert isinstance(get_jwt_strategy(), JWTStrategy)
+    monkeypatch.setattr("app.user.auth.JWTStrategy", MockJWTStrategy)
+    assert isinstance(get_jwt_strategy(), MockJWTStrategy)
+    assert mock_counter == 1
 
 
 @pytest.mark.parametrize(
@@ -39,13 +55,13 @@ async def test_get_or_create_user_gets_existing_user(
     message = ""
     mock_counter = 0
 
-    class FakeLogger(Logger):
+    class MockLogger(Logger):
         def info(self, msg, *args, **kwargs):
             nonlocal message, mock_counter
             message = msg
             mock_counter += 1
 
-    monkeypatch.setattr("app.user.admin.logger", FakeLogger(""))
+    monkeypatch.setattr("app.user.admin.logger", MockLogger(""))
     # creates new user
     new_user = await get_or_create_user(*USER_CREDS)
     assert isinstance(new_user, User)
@@ -62,14 +78,3 @@ async def test_create_admin(mock_async_session) -> None:
     user = await create_admin()
     assert user is not None
     check_user(user, True)
-
-
-"""
-async def test_lifespan(monkeypatch, mock_async_session) -> None:
-    from tests.fixtures.db_config import test_engine
-    from app import main
-    monkeypatch.setattr(main, "engine", test_engine)
-    async with lifespan("") as user:  # override_get_async_session
-        # assert user is not None
-        check_user(user)
-"""
