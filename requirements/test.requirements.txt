@@ -8,6 +8,7 @@ SQLAlchemy
 uvicorn[standard]
 
 # tests
+deepdiff
 pytest
 pytest-asyncio
 pytest-cov

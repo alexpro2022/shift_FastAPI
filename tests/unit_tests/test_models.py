@@ -1,66 +1,52 @@
-from uuid import uuid4
-
 import pytest
 
-from app.models import Dish, Menu, Submenu
-from tests.fixtures import data as d
-
-# Test MULTIPLE model
-COMMON_FIELDS = ("id", "title", "description")
+from app.models.models import Salary, User
 
 parametrize = pytest.mark.parametrize(
-    "model, data, attrs",
+    "model, attrs",
     (
-        (Dish, d.DISH_POST_PAYLOAD, (*COMMON_FIELDS, "price")),
-        (Menu, d.MENU_POST_PAYLOAD, (*COMMON_FIELDS,)),
-        (Submenu, d.SUBMENU_POST_PAYLOAD, (*COMMON_FIELDS,)),
+        (User, ["salary"]),
+        (Salary, ["id", "value", "inc_date", "user_id", "user"]),
     ),
 )
 
 
 @parametrize
-def test_model_attr(model, data: dict[str, str], attrs: str) -> None:
+def test_model_attr(model, attrs) -> None:
     for attr_name in attrs:
         assert hasattr(model, attr_name)
 
 
 @parametrize
-def test_model_repr(model, data: dict[str, str], attrs: str) -> None:
-    representation = repr(model(**data))
+def test_model_repr(model, attrs) -> None:
+    representation = repr(model())
     for attr_name in attrs:
         assert representation.find(attr_name) != -1
 
 
 @parametrize
-def test_asdict(model, data: dict[str, str], attrs: str) -> None:
-    obj = model(**data)._asdict()
-    assert isinstance(obj, dict)
-    for key in data:
-        assert obj[key] == data[key]
+def test_asdict(model, attrs) -> None:
+    d = model()._asdict()
+    assert isinstance(d, dict)
+    relation_fields = ("salary", "user")
+    for attr_name in attrs:
+        if attr_name in relation_fields:
+            # relation fields shoud not be in the dict:
+            with pytest.raises(KeyError):
+                d[attr_name]
+        else:
+            d[attr_name]
 
 
-# Test SINGLE model
-task_model_fields = pytest.mark.parametrize("field_name", ("id", "name", "description"))
+# attr_name, attr_type
+ID = ("id", "UUID")
+VALUE = ("value", "NUMERIC(8, 2)")
+INC_DATE = ("inc_date", "DATE")
+USER_ID = ("user_id", "CHAR(36)")
 
 
-@task_model_fields
-def test_task_model_attr(field_name: str) -> None:
-    assert hasattr(Task, field_name)
-
-
-@task_model_fields
-def test_task_model_repr(field_name: str) -> None:
-    representation = repr(Task())
-    assert representation.find(field_name) != -1
-
-
-def test_task_model_asdict() -> None:
-    data = {
-        "id": uuid4(),
-        "name": "test_as_dict_name",
-        "description": "test_as_dict_description",
-    }
-    obj = Task(**data)
-    assert isinstance(obj, Task)
-    assert isinstance(obj._asdict(), dict)
-    assert obj._asdict() == data
+@pytest.mark.parametrize("model, attrs", ((Salary, [ID, VALUE, INC_DATE, USER_ID]),))
+def test_model_columns_types(model, attrs) -> None:
+    for attr_name, col_type in attrs:
+        col = getattr(model, attr_name)
+        assert str(col.type) == col_type, str(col)
