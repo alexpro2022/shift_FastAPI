@@ -5,8 +5,8 @@ from app.models.models import Salary, User
 parametrize = pytest.mark.parametrize(
     "model, attrs",
     (
-        (User, ("id", "salary")),
-        (Salary, ("id", "value", "inc_date", "user_id", "user")),
+        (User, ["salary"]),
+        (Salary, ["id", "value", "inc_date", "user_id", "user"]),
     ),
 )
 
@@ -26,13 +26,27 @@ def test_model_repr(model, attrs) -> None:
 
 @parametrize
 def test_asdict(model, attrs) -> None:
-    obj = model()._asdict()
-    assert isinstance(obj, dict)
+    d = model()._asdict()
+    assert isinstance(d, dict)
     relation_fields = ("salary", "user")
-    for attr in attrs:
-        if attr in relation_fields:
+    for attr_name in attrs:
+        if attr_name in relation_fields:
             # relation fields shoud not be in the dict:
             with pytest.raises(KeyError):
-                obj[attr]
+                d[attr_name]
         else:
-            obj[attr]
+            d[attr_name]
+
+
+# attr_name, attr_type
+ID = ("id", "UUID")
+VALUE = ("value", "NUMERIC(8, 2)")
+INC_DATE = ("inc_date", "DATE")
+USER_ID = ("user_id", "CHAR(36)")
+
+
+@pytest.mark.parametrize("model, attrs", ((Salary, [ID, VALUE, INC_DATE, USER_ID]),))
+def test_model_columns_types(model, attrs) -> None:
+    for attr_name, col_type in attrs:
+        col = getattr(model, attr_name)
+        assert str(col.type) == col_type, str(col)

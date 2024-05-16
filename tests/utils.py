@@ -1,6 +1,16 @@
 from fastapi import status
 
 # from deepdiff import DeepDiff
+from app.config.app_config import app_conf
+from app.user.db import User
+
+USER_CREDS = (app_conf.admin_email, app_conf.admin_password)
+
+
+def check_user(user: User, is_superuser: bool = False) -> None:
+    assert user.email == app_conf.admin_email
+    assert user.hashed_password
+    assert user.is_superuser == is_superuser
 
 
 def compare(left, right) -> None:

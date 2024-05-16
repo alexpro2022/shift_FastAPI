@@ -18,7 +18,7 @@ services:
     build:
       context: ../..
       dockerfile: docker/test/Dockerfile
-    command: bash -c "pytest --cov --cov-config=.coveragerc"
+    command: bash -c "pytest -x --cov --cov-config=.coveragerc"
     depends_on:
       - db_test
     env_file:
