@@ -1,13 +1,5 @@
-alembic
-asyncpg
-email-validator
-fastapi
-fastapi-users[sqlalchemy]
-pydantic-settings
-SQLAlchemy
-uvicorn[standard]
+-r dev.requirements.txt
 
-# tests
 deepdiff
 pytest
 pytest-asyncio

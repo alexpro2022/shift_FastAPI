@@ -8,4 +8,4 @@ SQLAlchemy
 uvicorn[standard]
 
 # To remove if no admin panel needed
-starlette-admin
+# starlette-admin
