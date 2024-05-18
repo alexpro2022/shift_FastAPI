@@ -3,19 +3,24 @@ from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI
 
-from app.api.routers import main_router
+from app.api.endpoints.example import router
 from app.config.app_config import app_conf
 from app.config.db_config import engine
 from app.models.base import Base
 from app.user.admin import create_admin
+from app.user.routers import router as user_router
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, Any]:
+async def create_db_and_tables() -> None:
     # The below context manager is for dev quick start without alembic
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, Any]:
+    await create_db_and_tables()
     await create_admin()
     yield
 
@@ -24,4 +29,9 @@ app = FastAPI(
     title=app_conf.app_title, description=app_conf.app_description, lifespan=lifespan
 )
 
-app.include_router(main_router)
+for r in (
+    router,
+    user_router,
+    # add routers
+):
+    app.include_router(r)
