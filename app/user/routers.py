@@ -1,11 +1,12 @@
-from config.app_config import app_conf
 from fastapi import APIRouter
 
-from .auth import auth_backend, fastapi_users
+from .auth import auth_backend, fastapi_users, user_manager
 from .schemas import UserCreate, UserRead, UserUpdate
 
-router = APIRouter(prefix=f"{app_conf.URL_PREFIX}users", tags=["Users"])
+# from sqlalchemy import select
 
+
+router = APIRouter()
 
 router.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -18,24 +19,16 @@ router.include_router(
     tags=["auth"],
 )
 router.include_router(
-    fastapi_users.get_reset_password_router(),
-    prefix="/auth",
-    tags=["auth"],
-)
-router.include_router(
-    fastapi_users.get_verify_router(UserRead),
-    prefix="/auth",
-    tags=["auth"],
-)
-router.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
     prefix="/users",
     tags=["users"],
 )
 
 
-"""
-@app.get("/authenticated-route")
-async def authenticated_route(user: User = Depends(current_active_user)):
-    return {"message": f"Hello {user.email}!"}
-"""
+@router.get("/users")
+# for admins only
+async def get_all_users(user_manager: user_manager):
+    ...
+    # session: async_session):
+    # stmt = select(User)
+    # return await user_manager.get_all_users()

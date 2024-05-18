@@ -1,4 +1,4 @@
-from ._base import BaseConf, EmailStr, SecretStr
+from app.config._base import BaseConf, EmailStr, SecretStr
 
 
 class Settings(BaseConf):

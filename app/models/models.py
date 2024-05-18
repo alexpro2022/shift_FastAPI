@@ -2,10 +2,11 @@ import uuid
 from datetime import date
 from decimal import Decimal
 
-from config.app_config import app_conf
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from sqlalchemy import ForeignKey, Numeric, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.config.app_config import app_conf
 
 from .base import Base
 

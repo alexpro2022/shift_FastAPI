@@ -1,13 +1,13 @@
 from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator
 
-from config.app_config import app_conf
-from config.db_config import engine
 from fastapi import FastAPI
-from user.admin import create_admin
 
 from app.api.routers import main_router
+from app.config.app_config import app_conf
+from app.config.db_config import engine
 from app.models.base import Base
+from app.user.admin import create_admin
 
 
 @asynccontextmanager
@@ -16,7 +16,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, Any]:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
-    yield await create_admin()
+    await create_admin()
+    yield
 
 
 app = FastAPI(

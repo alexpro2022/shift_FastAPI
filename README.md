@@ -114,7 +114,6 @@ docker compose -f docker/dev/docker-compose.yml --env-file .env up -d --build
 
   Администрирование приложения может быть осуществлено:
   - через Swagger доступный по адресу http://localhost:8000/docs
-  - через админ панель по адресу http://localhost:8000/admin
 
   <h4 id="t1">Учетные данные для входа в админ-зону:</h4>
     <ul>

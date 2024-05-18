@@ -1,10 +1,4 @@
-from sqlalchemy import exc, select
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-
-from ..exceptions import ObjectExistsError, ObjectNotFoundError
-from .dependencies import async_session
-
-
+'''
 async def create(obj, asession: async_sessionmaker[AsyncSession] = async_session):
     """Saves `obj` to DB or raises `ObjectExistsError` if object already exists."""
     async with asession() as session:
@@ -44,3 +38,4 @@ async def get_or_404(
 async def get_all(model, asession: async_sessionmaker[AsyncSession] = async_session):
     """Returns list of all DB records of the model if any or empty list []."""
     return await get(model, asession)
+'''

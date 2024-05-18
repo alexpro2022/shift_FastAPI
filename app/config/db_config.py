@@ -3,7 +3,7 @@ from typing import Annotated, AsyncGenerator
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from ._base import DB_URL_PATTERN, BaseConf, SecretStr
+from app.config._base import DB_URL_PATTERN, BaseConf, SecretStr
 
 
 class Settings(BaseConf):

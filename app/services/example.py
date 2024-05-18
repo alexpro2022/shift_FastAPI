@@ -1,3 +1,4 @@
+"""
 from repositories.db import crud
 from repositories.exceptions import ObjectExistsError
 from repositories.models import Task
@@ -19,3 +20,4 @@ async def get_all_tasks_names() -> list[str]:
 async def get_task_description(task_name: str) -> str:
     task = await crud.get(Task, name=task_name)
     return task[0].description
+"""

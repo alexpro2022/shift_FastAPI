@@ -1,6 +1,7 @@
-from api.endpoints import example
 from fastapi import APIRouter
-from user import routers as u
+
+from app.api.endpoints import example
+from app.user import routers as u
 
 main_router = APIRouter()
 
@@ -11,3 +12,5 @@ for router in (
     # add routers
 ):
     main_router.include_router(router)
+
+# to remove above code into main.py
