@@ -32,6 +32,5 @@ app = FastAPI(
 for r in (
     router,
     user_router,
-    # add routers
 ):
     app.include_router(r)

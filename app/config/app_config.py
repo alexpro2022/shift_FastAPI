@@ -4,7 +4,7 @@ from app.config._base import BaseConf, EmailStr, SecretStr
 class Settings(BaseConf):
     URL_PREFIX: str = "/api/v1/"
     DEFAULT_STR: str = "To be implemented in .env file"
-    SUPER_ONLY: str = "__Только для суперюзеров:__ "
+    ADMIN_ONLY: str = "__Только для админов/суперюзеров:__ "
     AUTH_ONLY: str = "__Только для авторизованных пользователей:__ "
     ALL_USERS: str = "__Для всех пользователей:__ "
 

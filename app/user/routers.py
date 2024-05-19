@@ -1,10 +1,13 @@
 from fastapi import APIRouter
 
-from .auth import auth_backend, fastapi_users, user_manager
+from app.config.app_config import app_conf
+from app.config.db_config import async_session
+from app.models.models import Salary
+from app.repositories import crud
+
+from .auth import auth_backend, fastapi_users
+from .db import user_db
 from .schemas import UserCreate, UserRead, UserUpdate
-
-# from sqlalchemy import select
-
 
 router = APIRouter()
 
@@ -25,10 +28,27 @@ router.include_router(
 )
 
 
-@router.get("/users")
-# for admins only
-async def get_all_users(user_manager: user_manager):
-    ...
-    # session: async_session):
-    # stmt = select(User)
-    # return await user_manager.get_all_users()
+@router.get(
+    "/users",
+    tags=["users"],
+    # dependencies=[Depends(current_superuser)],
+    # response_model=list[schemas.PostResponse],
+    # response_model_exclude_none=True,
+    summary="Возвращает список всех пользователей.",
+    description=app_conf.ADMIN_ONLY,
+)
+async def get_all_users(user_db: user_db):
+    return await user_db.get_all()
+
+
+@router.get(
+    "/salaries",
+    tags=["salaries"],
+    # dependencies=[Depends(current_superuser)],
+    # response_model=list[schemas.PostResponse],
+    # response_model_exclude_none=True,
+    summary="Возвращает список всех зарплат.",
+    description=app_conf.ADMIN_ONLY,
+)
+async def get_all_salaries(session: async_session):
+    return await crud.get_all(session, Salary)

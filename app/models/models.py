@@ -22,10 +22,10 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
 
 class Salary(Base):
-    value: Mapped[Decimal] = mapped_column(
+    value: Mapped[Decimal | None] = mapped_column(
         Numeric(precision=app_conf.salary_precision, scale=app_conf.salary_scale)
     )
-    inc_date: Mapped[date]
+    inc_date: Mapped[date | None]
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))
     user: Mapped["User"] = relationship(back_populates="salary")
 

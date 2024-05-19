@@ -10,6 +10,9 @@ from fastapi_users.authentication import (
 )
 
 from app.config.app_config import app_conf
+from app.config.db_config import get_async_session
+from app.models.models import Salary
+from app.repositories import crud
 
 from .db import User, user_db
 from .schemas import UserCreate
@@ -17,28 +20,16 @@ from .validators import password_content_validator, password_length_validator
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    # reset_password_token_secret = SECRET
-    # verification_token_secret = SECRET
-
     async def validate_password(self, password: str, user: User | UserCreate) -> None:
         password_length_validator(password)
         password_content_validator(password, user.email)
 
     async def on_after_register(self, user: User, request: Request | None = None):
         print(f"Пользователь {user.email} зарегистрирован.")
-
-    """
-    async def on_after_forgot_password(
-        self, user: User, token: str, request: Optional[Request] = None
-    ):
-        print(f"User {user.id} has forgot their password. Reset token: {token}")
-
-    async def on_after_request_verify(
-        self, user: User, token: str, request: Optional[Request] = None
-    ):
-        print(f"Verification requested for user {user.id}. Verification token: {token}")
-    """
-    # async def get_all_users(self, )
+        if not user.is_superuser:
+            session = await anext(get_async_session())
+            await crud.create(session, Salary(user_id=user.id))
+        # TODO: notify admin by email
 
 
 async def get_user_manager(user_db: user_db):
