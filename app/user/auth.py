@@ -10,7 +10,6 @@ from fastapi_users.authentication import (
 )
 
 from app.config.app_config import app_conf
-from app.config.db_config import get_async_session
 from app.models.models import Salary
 from app.repositories import crud
 
@@ -27,8 +26,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_register(self, user: User, request: Request | None = None):
         print(f"Пользователь {user.email} зарегистрирован.")
         if not user.is_superuser:
-            session = await anext(get_async_session())
-            await crud.create(session, Salary(user_id=user.id))
+            await crud.create(self.user_db.session, Salary(user_id=user.id))
         # TODO: notify admin by email
 
 
