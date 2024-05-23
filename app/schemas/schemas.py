@@ -1,3 +1,6 @@
+from datetime import date
+from decimal import Decimal
+
 from pydantic import BaseModel, ConfigDict, Field
 
 # constants for examples
@@ -10,3 +13,8 @@ class Example(BaseModel):
     title: str = Field(max_length=256, examples=[TITLE])
     description: str = Field(max_length=2000, examples=[DESCRIPTION])
     model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
+
+
+class SalaryPatch(BaseModel):
+    value: Decimal
+    inc_date: date

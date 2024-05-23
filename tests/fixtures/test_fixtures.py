@@ -20,3 +20,7 @@ def test_init_db_fixture(init_db):
 
 def test_get_test_session_fixture(get_test_session):
     assert isinstance(get_test_session, AsyncSession)
+
+
+def test_create_obj_fixture(create_obj):
+    assert asyncio.iscoroutine(create_obj)

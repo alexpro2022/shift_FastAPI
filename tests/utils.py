@@ -1,8 +1,12 @@
+import uuid
+
 from fastapi import status
 
 # from deepdiff import DeepDiff
 from app.config.app_config import app_conf
+from app.repositories import crud
 from app.user.db import User
+from tests.fixtures.data import ModelTest
 
 USER_CREDS = (app_conf.admin_email, app_conf.admin_password)
 
@@ -37,11 +41,26 @@ def compare_lists(left: list, right: list) -> None:
 def check_exception_info(
     exc_info, expected_msg: str, expected_error_code: int | None = None
 ) -> None:
-    # assert expected_msg in exc_info.value.args
-    assert expected_msg == str(exc_info)
+    assert expected_msg in exc_info.value.args
+    # assert expected_msg == str(exc_info)
     if expected_error_code is not None:
         assert expected_error_code in exc_info.value.args
 
 
 def check_exception_info_not_found(exc_info, msg_not_found: str) -> None:
     check_exception_info(exc_info, msg_not_found, status.HTTP_404_NOT_FOUND)
+
+
+async def compare_with_db(
+    session, obj: ModelTest, expected_title, expected_description
+):
+    retrieved = await crud.get_or_404(session, ModelTest, obj.id)
+    assert isinstance(retrieved, ModelTest)
+    assert isinstance(retrieved.id, uuid.UUID)
+    assert retrieved.title == expected_title
+    assert retrieved.description == expected_description
+    assert obj == retrieved
+
+
+async def db_empty(session, model):
+    return await crud.get_all(session, model) == []

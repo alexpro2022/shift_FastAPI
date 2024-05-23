@@ -6,7 +6,9 @@ from httpx import AsyncClient
 
 from app.main import app
 from app.models.base import Base as TestBase
+from app.repositories import crud
 from tests.conftest import override_get_async_session
+from tests.fixtures.data import DESCR, TITLE, ModelTest
 
 from .db_config import TestingSessionLocal, test_engine
 
@@ -21,7 +23,7 @@ async def init_db() -> AsyncGenerator[Literal[True], Any]:
 
 
 @pytest_asyncio.fixture
-async def get_test_session() -> AsyncGenerator[None, Any]:
+async def get_test_session(init_db) -> AsyncGenerator[None, Any]:
     async with TestingSessionLocal() as session:
         yield session
 
@@ -35,3 +37,11 @@ async def async_client() -> AsyncGenerator[AsyncClient, Any]:
 @pytest.fixture
 def mock_async_session(monkeypatch, init_db) -> None:
     monkeypatch.setattr("app.user.admin.get_async_session", override_get_async_session)
+    monkeypatch.setattr(
+        "app.services.salary.get_async_session", override_get_async_session
+    )
+
+
+@pytest.fixture
+def create_obj(get_test_session):
+    return crud.insert_(get_test_session, ModelTest, title=TITLE, description=DESCR)
