@@ -2,7 +2,7 @@ from app.config._base import BaseConf, EmailStr, SecretStr
 
 
 class Settings(BaseConf):
-    URL_PREFIX: str = "/api/v1/"
+    URL_PREFIX: str = "/api/v1/{}"
     DEFAULT_STR: str = "To be implemented in .env file"
     ADMIN_ONLY: str = "__Только для админов/суперюзеров:__ "
     AUTH_ONLY: str = "__Только для авторизованных пользователей:__ "
@@ -19,7 +19,7 @@ class Settings(BaseConf):
     admin_password: str = "admpw"
     password_length: int = 3
     token_lifetime: int = 3600
-    token_url: str = "auth/jwt/login"
+    token_url: str = URL_PREFIX.format("auth/jwt/login")
     auth_backend_name: str = "jwt"
 
 

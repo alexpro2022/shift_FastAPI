@@ -26,8 +26,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_register(self, user: User, request: Request | None = None):
         print(f"Пользователь {user.email} зарегистрирован.")
         if not user.is_superuser:
-            await crud.create(self.user_db.session, Salary(user_id=user.id))
-        # TODO: notify admin by email
+            # await crud.create(self.user_db.session, Salary(user_id=user.id))
+            await crud.insert_(self.user_db.session, Salary, user_id=user.id)
+            # TODO: notify admin by email
+            # return direct_url: app_conf.URL_PREFIX...
 
 
 async def get_user_manager(user_db: user_db):
@@ -50,5 +52,5 @@ user_manager = Annotated[UserManager, Depends(get_user_manager)]
 fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth_backend])
 current_user = fastapi_users.current_user(active=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)
-authorized = Annotated[User, Depends(current_user)]
-admin = Annotated[User, Depends(current_superuser)]
+# authorized = Annotated[User, Depends(current_user)]
+# admin = Annotated[User, Depends(current_superuser)]

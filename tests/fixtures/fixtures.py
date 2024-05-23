@@ -21,7 +21,7 @@ async def init_db() -> AsyncGenerator[Literal[True], Any]:
 
 
 @pytest_asyncio.fixture
-async def get_test_session() -> AsyncGenerator[None, Any]:
+async def get_test_session(init_db) -> AsyncGenerator[None, Any]:
     async with TestingSessionLocal() as session:
         yield session
 
