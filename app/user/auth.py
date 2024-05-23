@@ -10,8 +10,8 @@ from fastapi_users.authentication import (
 )
 
 from app.config.app_config import app_conf
-from app.models.models import Salary
-from app.repositories import crud
+from app.services.admin import notify_admin
+from app.services.salary import create_salary_record
 
 from .db import User, user_db
 from .schemas import UserCreate
@@ -26,10 +26,8 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_register(self, user: User, request: Request | None = None):
         print(f"Пользователь {user.email} зарегистрирован.")
         if not user.is_superuser:
-            # await crud.create(self.user_db.session, Salary(user_id=user.id))
-            await crud.insert_(self.user_db.session, Salary, user_id=user.id)
-            # TODO: notify admin by email
-            # return direct_url: app_conf.URL_PREFIX...
+            await create_salary_record(user_id=user.id)
+            await notify_admin(user_id=user.id)
 
 
 async def get_user_manager(user_db: user_db):

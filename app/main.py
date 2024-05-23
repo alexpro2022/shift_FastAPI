@@ -26,8 +26,11 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, Any]:
 
 
 app = FastAPI(
-    title=app_conf.app_title, description=app_conf.app_description, lifespan=lifespan
+    title=app_conf.app_title,
+    description=app_conf.app_description,
+    lifespan=lifespan,
 )
+
 
 for r in (
     salaries.router,

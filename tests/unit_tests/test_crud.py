@@ -4,16 +4,8 @@ import pytest
 from fastapi import HTTPException
 
 from app.repositories import crud
-from tests.fixtures.data import ModelTest
+from tests.fixtures.data import DESCR, TITLE, ModelTest
 from tests.utils import check_exception_info_not_found, compare_with_db
-
-TITLE = "test_title"
-DESCR = "test_descr"
-
-
-@pytest.fixture
-async def create_obj(get_test_session):
-    return crud.insert_(get_test_session, ModelTest, title=TITLE, description=DESCR)
 
 
 async def test_crud_insert(get_test_session, create_obj):

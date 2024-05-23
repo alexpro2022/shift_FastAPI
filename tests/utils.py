@@ -60,3 +60,7 @@ async def compare_with_db(
     assert retrieved.title == expected_title
     assert retrieved.description == expected_description
     assert obj == retrieved
+
+
+async def db_empty(session, model):
+    return await crud.get_all(session, model) == []

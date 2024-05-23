@@ -9,6 +9,7 @@ MSG_OBJECT_NOT_FOUND = "Объект не найден"
 
 async def fetch_one(session: AsyncSession, stmt):
     result = await session.scalars(stmt)
+    await session.commit()
     return result.first()
 
 
