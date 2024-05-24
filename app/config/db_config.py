@@ -3,12 +3,10 @@ from typing import Annotated, AsyncGenerator
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from ._base import DB_URL_PATTERN, BaseConf, SecretStr
+from app.config._base import DB_URL_PATTERN, BaseConf, SecretStr
 
 
 class Settings(BaseConf):
-    # all defaults values are needed for GitHub workflow tests
-    # TODO: check the possibility to `cp env_example .env` in workflow.yml
     postgres_user: SecretStr = "postgres"
     postgres_password: SecretStr = "postgrespw"
     db_host: str = "db"  # database service name in docker-compose.yml

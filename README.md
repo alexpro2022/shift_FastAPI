@@ -1,5 +1,8 @@
 # FastAPI template
 
+[![Test Suite](https://github.com/alexpro2022/shift_FastAPI/actions/workflows/branch_test.yml/badge.svg)](https://github.com/alexpro2022/shift_FastAPI/actions/workflows/branch_test.yml)
+[![codecov](https://codecov.io/gh/alexpro2022/shift_FastAPI/graph/badge.svg?token=3cGBirHlft)](https://codecov.io/gh/alexpro2022/shift_FastAPI)
+
 Проект развернут на удаленном сервере по адресу:<br>
 https://.duckdns.org/api/v1 <br>
 https://.duckdns.org/api/v2 <br>
@@ -49,7 +52,7 @@ https://.duckdns.org/api/v2 <br>
 [![Pytest](https://img.shields.io/badge/-Pytest-464646?logo=Pytest)](https://docs.pytest.org/en/latest/)
 [![Pytest-asyncio](https://img.shields.io/badge/-Pytest--asyncio-464646?logo=Pytest-asyncio)](https://pypi.org/project/pytest-asyncio/)
 [![pytest-cov](https://img.shields.io/badge/-pytest--cov-464646?logo=codecov)](https://pytest-cov.readthedocs.io/en/latest/)
-[![deepdiff](https://img.shields.io/badge/-deepdiff-464646?logo=deepdiff)](https://zepworks.com/deepdiff/6.3.1/diff.html)
+[![deepdiff](https://img.shields.io/badge/-deepdiff-464646?logo=deepdiff)](https://zepworks.com/deepdiff/7.0.1/)
 [![pre-commit](https://img.shields.io/badge/-pre--commit-464646?logo=pre-commit)](https://pre-commit.com/)
 
 [⬆️Оглавление](#оглавление)
@@ -79,8 +82,8 @@ docker --version && docker-compose --version
 Клонируйте репозиторий с GitHub и введите данные для переменных окружения (значения даны для примера, но их можно оставить):
 
 ```bash
-git clone https://github.com/
-cd
+git clone https://github.com/alexpro2022/shift_FastAPI.git
+cd shift_FastAPI
 cp .env.example .env
 nano .env
 ```
@@ -93,7 +96,7 @@ nano .env
 Из корневой директории проекта выполните команду запуска тестов:
 ```bash
 docker compose -f docker/test/docker-compose.yml --env-file .env up --build --abort-on-container-exit && \
-docker compose -f docker/test/docker-compose.yml --env-file .env down -v
+docker compose -f docker/test/docker-compose.yml --env-file .env down -v && docker system prune -f
 ```
 После прохождения тестов в консоль будет выведен отчет pytest и coverage.
 
@@ -111,7 +114,6 @@ docker compose -f docker/dev/docker-compose.yml --env-file .env up -d --build
 
   Администрирование приложения может быть осуществлено:
   - через Swagger доступный по адресу http://localhost:8000/docs
-  - через админ панель по адресу http://localhost:8000/admin
 
   <h4 id="t1">Учетные данные для входа в админ-зону:</h4>
     <ul>
@@ -142,7 +144,7 @@ docker compose -f docker/dev/docker-compose.yml --env-file .env down -v && docke
 ## Удаление приложения:
 Из корневой директории проекта выполните команду:
 ```bash
-cd .. && rm -fr
+cd .. && rm -fr shift_FastAPI
 ```
 
 [⬆️Оглавление](#оглавление)

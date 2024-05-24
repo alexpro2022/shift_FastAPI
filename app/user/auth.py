@@ -9,7 +9,9 @@ from fastapi_users.authentication import (
     JWTStrategy,
 )
 
-from config.app_config import app_conf
+from app.config.app_config import app_conf
+from app.services.admin import notify_admin
+from app.services.salary import create_salary_record
 
 from .db import User, user_db
 from .schemas import UserCreate
@@ -17,31 +19,17 @@ from .validators import password_content_validator, password_length_validator
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    # reset_password_token_secret = SECRET
-    # verification_token_secret = SECRET
-
     async def validate_password(self, password: str, user: User | UserCreate) -> None:
         password_length_validator(password)
         password_content_validator(password, user.email)
 
     async def on_after_register(self, user: User, request: Request | None = None):
         print(f"Пользователь {user.email} зарегистрирован.")
-
-    """
-    async def on_after_forgot_password(
-        self, user: User, token: str, request: Optional[Request] = None
-    ):
-        print(f"User {user.id} has forgot their password. Reset token: {token}")
-
-    async def on_after_request_verify(
-        self, user: User, token: str, request: Optional[Request] = None
-    ):
-        print(f"Verification requested for user {user.id}. Verification token: {token}")
-    """
+        if not user.is_superuser:
+            await create_salary_record(user_id=user.id)
+            await notify_admin(user_id=user.id)
 
 
-# async def get_user_manager(
-# user_db: Annotated[SQLAlchemyUserDatabase, Depends(get_user_db)]):
 async def get_user_manager(user_db: user_db):
     yield UserManager(user_db)
 
@@ -58,8 +46,9 @@ auth_backend = AuthenticationBackend(
     get_strategy=get_jwt_strategy,
 )
 
+user_manager = Annotated[UserManager, Depends(get_user_manager)]
 fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth_backend])
 current_user = fastapi_users.current_user(active=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)
 authorized = Annotated[User, Depends(current_user)]
-admin = Annotated[User, Depends(current_superuser)]
+admin = Depends(current_superuser)

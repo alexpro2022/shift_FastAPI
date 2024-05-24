@@ -1,7 +1,5 @@
 *
-!requirements/test.requirements.txt
-!alembic.ini
-!alembic
+!requirements
 !app
 !tests
 !setup.cfg

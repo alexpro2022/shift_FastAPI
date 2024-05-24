@@ -1,14 +1,13 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
-from ._base import DB_URL_PATTERN, BaseConf
+from app.config._base import DB_URL_PATTERN, BaseConf
 
 
 class Settings(BaseConf):
-    # defaults needed for GitHub Action tests
     postgres_user_test: str = "postgres"
     postgres_password_test: str = "postgrespw"
-    db_host_test: str = "db_test"  # "0.0.0.0"
+    db_host_test: str = "0.0.0.0"
     db_port_test: str = "5432"
     db_name_test: str = "postgres"
 
@@ -24,7 +23,6 @@ class Settings(BaseConf):
 
 
 test_db_conf = Settings()
-
 test_engine = create_async_engine(test_db_conf.test_db_url, poolclass=NullPool)
 TestingSessionLocal = async_sessionmaker(
     test_engine, expire_on_commit=False, autocommit=False, autoflush=False

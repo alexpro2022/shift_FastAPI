@@ -7,8 +7,8 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     environment:
-      # - POSTGRES_DB=$POSTGRES_DB_TEST
-      # - POSTGRES_USER=$POSTGRES_USER_TEST
+      - POSTGRES_DB=$DB_NAME_TEST
+      - POSTGRES_USER=$POSTGRES_USER_TEST
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD_TEST
     expose:
       - $DB_PORT
@@ -18,7 +18,7 @@ services:
     build:
       context: ../..
       dockerfile: docker/test/Dockerfile
-    command: bash -c "pytest --cov --cov-config=.coveragerc"
+    command: bash -c "pytest -x --cov --cov-config=.coveragerc"
     depends_on:
       - db_test
     env_file:

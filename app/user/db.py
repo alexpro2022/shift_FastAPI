@@ -1,18 +1,21 @@
 from typing import Annotated, Any, AsyncGenerator
 
 from fastapi import Depends
-from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
+from fastapi_users.db import SQLAlchemyUserDatabase
+from sqlalchemy import select
 
-from app.models.base import Base
-from config.db_config import async_session
+from app.config.db_config import async_session
+from app.models.models import User
 
 
-class User(SQLAlchemyBaseUserTableUUID, Base):
-    pass
+class CustomUserDatabase(SQLAlchemyUserDatabase):
+    async def get_all(self):
+        res = await self.session.scalars(select(self.user_table))
+        return res.all()
 
 
 async def get_user_db(session: async_session) -> AsyncGenerator[Any, Any]:
-    yield SQLAlchemyUserDatabase(session, User)
+    yield CustomUserDatabase(session, User)
 
 
-user_db = Annotated[SQLAlchemyUserDatabase, Depends(get_user_db)]
+user_db = Annotated[CustomUserDatabase, Depends(get_user_db)]

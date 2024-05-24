@@ -2,10 +2,10 @@ from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config.db_config import get_async_session
 from app.main import app
-from config.db_config import get_async_session
 
-from .fixtures.fixtures import TestingSessionLocal
+from .fixtures.db_config import TestingSessionLocal
 
 pytest_plugins = [
     "tests.fixtures.fixtures",
