@@ -1,9 +1,9 @@
-import uuid
-
 from fastapi_users import schemas
 
+from app.types import UUID_ID
 
-class UserRead(schemas.BaseUser[uuid.UUID]):
+
+class UserRead(schemas.BaseUser[UUID_ID]):
     pass
 
 

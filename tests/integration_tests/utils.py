@@ -1,4 +1,3 @@
-import uuid
 from http import HTTPStatus
 from typing import Any, Callable, TypeAlias
 
@@ -8,6 +7,7 @@ from httpx import AsyncClient
 from httpx._types import HeaderTypes
 
 from app.main import app
+from app.types import UUID_DEFAULT, UUID_ID
 from tests.fixtures import data as d
 
 Json: TypeAlias = dict[str, Any]
@@ -36,7 +36,7 @@ def check_response(
 async def request(
     async_client: AsyncClient,
     view_name: str,
-    user_id: uuid.UUID = uuid.uuid4(),
+    user_id: UUID_ID = UUID_DEFAULT(),
     headers: HeaderTypes | None = None,
 ):
     if view_name == "update_salary":

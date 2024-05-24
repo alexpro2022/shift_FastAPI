@@ -8,3 +8,4 @@ UUID_DEFAULT = uuid.uuid4
 
 Response_4xx: TypeAlias = dict[int, dict[str, Any]]
 AsyncGenAsyncSession: TypeAlias = AsyncGenerator[AsyncSession, None]
+ModelAsDict: TypeAlias = dict[str, Any]

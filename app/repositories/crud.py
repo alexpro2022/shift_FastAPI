@@ -1,10 +1,9 @@
-import uuid
-
 from fastapi import HTTPException, status
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-MSG_OBJECT_NOT_FOUND = "Объект не найден"
+from app.messages import MSG_OBJECT_NOT_FOUND
+from app.types import UUID_ID
 
 
 async def fetch_one(session: AsyncSession, stmt):
@@ -43,5 +42,5 @@ async def get_all(session: AsyncSession, model):
     return await get(session, model)
 
 
-async def get_or_404(session: AsyncSession, model, id: int | uuid.UUID):
+async def get_or_404(session: AsyncSession, model, id: int | UUID_ID):
     return await get(session, model, exception=True, id=id)
