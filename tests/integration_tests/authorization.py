@@ -1,10 +1,10 @@
-import uuid
 from http import HTTPStatus
 
 from httpx import AsyncClient
 
 from app.config.app_config import app_conf
 from app.models.models import User
+from app.types import UUID_ID
 from tests.fixtures import data as d
 from tests.utils import db_empty
 
@@ -18,7 +18,7 @@ async def _post(client: AsyncClient, url: str, **kwargs):
     return response
 
 
-async def register_user(client: AsyncClient, session) -> uuid.UUID:
+async def register_user(client: AsyncClient, session) -> UUID_ID:
     assert await db_empty(session, User)
     response = await _post(client, REGISTER_URL, json=d.USER_REGISTER_DATA)
     assert not await db_empty(session, User)

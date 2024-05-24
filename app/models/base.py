@@ -1,9 +1,7 @@
-from typing import Any
-
 from sqlalchemy import UUID, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
-from app.types import UUID_DEFAULT, UUID_ID
+from app.types import UUID_DEFAULT, UUID_ID, ModelAsDict
 
 
 class Base(DeclarativeBase):
@@ -32,5 +30,5 @@ class Base(DeclarativeBase):
     def __repr__(self) -> str:
         return f"\nid: {self.id}"
 
-    def _asdict(self) -> dict[str, Any]:
+    def _asdict(self) -> ModelAsDict:
         return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}

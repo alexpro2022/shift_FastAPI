@@ -1,12 +1,12 @@
-import uuid
-
 from fastapi import APIRouter
 
 from app.config.app_config import app_conf
 from app.config.db_config import async_session
+from app.messages import MSG_NO_SALARY_ACCOUNT
 from app.models.models import Salary
 from app.repositories import crud
 from app.schemas import schemas
+from app.types import UUID_ID
 from app.user.auth import admin, authorized
 
 from .responses import get_404
@@ -34,7 +34,7 @@ async def get_all_salaries(session: async_session):
     responses=get_404("Employee"),
 )
 async def update_salary(
-    session: async_session, user_id: uuid.UUID, payload: schemas.SalaryPatch
+    session: async_session, user_id: UUID_ID, payload: schemas.SalaryPatch
 ):
     salary: Salary = await crud.get(
         session, Salary, exception=True, fetch_one=True, user_id=user_id
@@ -55,5 +55,5 @@ async def get_my_salary(session: async_session, user: authorized):
         exception=True,
         fetch_one=True,
         user_id=user.id,
-        msg="У админов нет записей в БД зарплат.",
+        msg=MSG_NO_SALARY_ACCOUNT,
     )

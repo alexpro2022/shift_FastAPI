@@ -1,4 +1,3 @@
-import uuid
 from http import HTTPStatus
 
 import pytest
@@ -6,6 +5,7 @@ from httpx import AsyncClient
 
 from app.models.models import Salary
 from app.repositories import crud
+from app.types import UUID_ID
 from tests.fixtures import data as d
 from tests.integration_tests.authorization import register_user
 from tests.integration_tests.utils import Json, check_response, request
@@ -53,8 +53,8 @@ async def test_on_register_creates_salary_record(
     salary: Salary = salaries[0]
     assert salary.inc_date is None
     assert salary.value is None
-    assert isinstance(salary.id, uuid.UUID)
-    assert isinstance(salary.user_id, uuid.UUID)
+    assert isinstance(salary.id, UUID_ID)
+    assert isinstance(salary.user_id, UUID_ID)
     assert str(salary.user_id) == user_id
 
 

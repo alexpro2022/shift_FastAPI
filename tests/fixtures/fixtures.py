@@ -1,4 +1,3 @@
-import uuid
 from typing import Any, AsyncGenerator, Generator, Literal
 
 import pytest
@@ -8,6 +7,7 @@ from httpx import AsyncClient
 from app.main import app
 from app.models.base import Base as TestBase
 from app.repositories import crud
+from app.types import UUID_DEFAULT
 from app.user.auth import current_superuser, current_user
 from app.user.db import User
 from tests.conftest import override_get_async_session
@@ -53,7 +53,7 @@ def create_obj(get_test_session):
 @pytest.fixture
 def admin_user() -> Generator[None, Any, None]:
     admin = User(
-        id=uuid.uuid4(),
+        id=UUID_DEFAULT(),
         is_active=True,
         is_verified=True,
         is_superuser=True,
