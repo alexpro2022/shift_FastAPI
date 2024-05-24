@@ -3,10 +3,12 @@
 [![Test Suite](https://github.com/alexpro2022/shift_FastAPI/actions/workflows/branch_test.yml/badge.svg)](https://github.com/alexpro2022/shift_FastAPI/actions/workflows/branch_test.yml)
 [![codecov](https://codecov.io/gh/alexpro2022/shift_FastAPI/graph/badge.svg?token=3cGBirHlft)](https://codecov.io/gh/alexpro2022/shift_FastAPI)
 
+REST-сервис просмотра текущей зарплаты и даты следующего повышения.
+
+<details><summary>TODO</summary><br>
 Проект развернут на удаленном сервере по адресу:<br>
 https://.duckdns.org/api/v1 <br>
 https://.duckdns.org/api/v2 <br>
-
 
 Администрирование приложения может быть осуществлено:
   - через админ панель по адресу https://.duckdns.org/admin <br>
@@ -17,6 +19,7 @@ https://.duckdns.org/api/v2 <br>
   - Redoc доступен по адресу https://.duckdns.org/redoc
   - Скачать yaml-файл можно по адресу https://.duckdns.org/schema
 
+</details>
 
 <br>
 
@@ -62,7 +65,19 @@ https://.duckdns.org/api/v2 <br>
 <br>
 
 ## Описание работы:
-Add app description here
+При первом запуске приложения в БД пользователей будет создан аккаунт работодателя с правами админа, который позволяет редактировать записи сотрудников в БД зарплат. Учетные данные аккаунта админа задаются в **.env**-файле в виде переменных:
+
+  ```
+    ADMIN_EMAI=adm@adm.com
+    ADMIN_PASSWORD=admpw
+  ```
+
+1. Регистрация нового сотрудника в системе - при этом:
+  - создается аккаунт сотрудника в БД пользователей
+  - создается запись в таблице зарплат с uuid сотрудника и пустыми полями `величина зарплаты` и `дата следующего повышения` (редактируются работодателем/админом).
+  - высылается сообщение админу о регистрации нового сотрудника и необходимости заполнения его записи в таблице зарплат
+2. Авторизация сотрудника в системе - получение токена.
+3. Просмотр текущей зарплаты и даты следующего повышения возможен только для авторизованного пользователя по адресу 'http://localhost:8000/api/v1/salary/my_salary'
 
 <br>
 
@@ -121,9 +136,11 @@ docker compose -f docker/dev/docker-compose.yml --env-file .env up -d --build
       <li>password: admpw
     </ul><br>
 
+<!--
   Техническая документация:
   - Swagger доступен по адресу http://localhost:8000/docs
   - Redoc доступен по адресу http://localhost:8000/redoc
+-->
 
 <br>
 2. Остановить docker и удалить контейнеры можно командой из корневой директории проекта:
