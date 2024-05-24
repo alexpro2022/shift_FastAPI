@@ -3,7 +3,7 @@ from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI
 
-from app.api.endpoints import salaries
+from app.api.endpoints import salary
 from app.config.app_config import app_conf
 from app.config.db_config import engine
 from app.models.base import Base
@@ -33,7 +33,7 @@ app = FastAPI(
 
 
 for r in (
-    salaries.router,
+    salary.router,
     user_router,
 ):
     app.include_router(r)

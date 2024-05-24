@@ -1,4 +1,5 @@
-from typing import Any, AsyncGenerator, Literal
+import uuid
+from typing import Any, AsyncGenerator, Generator, Literal
 
 import pytest
 import pytest_asyncio
@@ -7,6 +8,8 @@ from httpx import AsyncClient
 from app.main import app
 from app.models.base import Base as TestBase
 from app.repositories import crud
+from app.user.auth import current_superuser, current_user
+from app.user.db import User
 from tests.conftest import override_get_async_session
 from tests.fixtures.data import DESCR, TITLE, ModelTest
 
@@ -45,3 +48,18 @@ def mock_async_session(monkeypatch, init_db) -> None:
 @pytest.fixture
 def create_obj(get_test_session):
     return crud.insert_(get_test_session, ModelTest, title=TITLE, description=DESCR)
+
+
+@pytest.fixture
+def admin_user() -> Generator[None, Any, None]:
+    admin = User(
+        id=uuid.uuid4(),
+        is_active=True,
+        is_verified=True,
+        is_superuser=True,
+    )
+    app.dependency_overrides[current_superuser] = lambda: admin
+    app.dependency_overrides[current_user] = lambda: admin
+    yield
+    app.dependency_overrides[current_superuser] = current_superuser
+    app.dependency_overrides[current_user] = current_user

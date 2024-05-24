@@ -50,5 +50,5 @@ user_manager = Annotated[UserManager, Depends(get_user_manager)]
 fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth_backend])
 current_user = fastapi_users.current_user(active=True)
 current_superuser = fastapi_users.current_user(active=True, superuser=True)
-# authorized = Annotated[User, Depends(current_user)]
-# admin = Annotated[User, Depends(current_superuser)]
+authorized = Annotated[User, Depends(current_user)]
+admin = Depends(current_superuser)

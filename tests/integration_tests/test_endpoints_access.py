@@ -3,46 +3,45 @@ from http import HTTPStatus
 import pytest
 from httpx import AsyncClient
 
-from app.config.app_config import app_conf
-from app.main import app
-from app.models.models import Salary
-from tests.utils import db_empty
+from tests.integration_tests.authorization import get_auth_user_token, get_headers
+from tests.integration_tests.utils import has_access, request
 
-from ..fixtures import data as d
-from .utils import Json, check_response, reverse
-
-# pytestmark = pytest.mark.skipif(..., reason="Not ready yet")
+ADMIN_ENDPOINTS_VIEWS = ("get_all_users", "get_all_salaries", "update_salary")
+AUTH_USER_ENDPOINT_VIEW = "get_my_salary"
+ALL_ENDPOINTS_VIEWS = (*ADMIN_ENDPOINTS_VIEWS, AUTH_USER_ENDPOINT_VIEW)
 
 
-@pytest.mark.parametrize(
-    "view_name, expected_result",
-    (
-        ("get_all_users", d.ALL_USERS),  # needs fixture creating the two users
-        ("get_all_salaries", d.ALL_SALARIES),
-    ),
-)
-async def test_get_all_xxx(
-    init_db, async_client: AsyncClient, view_name: str, expected_result: Json
-) -> None:
-    url = reverse(app, view_name)
-    response = await async_client.get(url)
-    assert response.status_code == HTTPStatus.OK
-    response_json = response.json()
-    assert check_response(response_json, expected_result) == "DONE"
+# ANON USER - No access to all endpoints
+@pytest.mark.parametrize("view_name", ALL_ENDPOINTS_VIEWS)
+async def test_anon_has_no_access(init_db, async_client: AsyncClient, view_name: str):
+    response = await request(async_client, view_name)
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
 
 
-async def test_on_register_creates_salary_record(
-    init_db, async_client: AsyncClient, get_test_session, mock_async_session
+# ADMIN USER - Full access to all endpoints
+@pytest.mark.parametrize("view_name", ALL_ENDPOINTS_VIEWS)
+async def test_admin_has_full_access(
+    init_db, admin_user, async_client: AsyncClient, view_name: str
 ):
-    payload = {
-        "email": "user@example.com",
-        "password": "string",
-        "is_active": True,
-        "is_superuser": False,
-        "is_verified": False,
-    }
-    assert await db_empty(get_test_session, Salary)
-    url = app_conf.URL_PREFIX.format("auth/register")
-    response = await async_client.post(url, json=payload)
-    assert response.status_code == HTTPStatus.CREATED
-    assert not await db_empty(get_test_session, Salary)
+    response = await request(async_client, view_name)
+    assert has_access(response)
+
+
+# AUTHORIZED USER - Only access to my_salary endpoint
+@pytest.mark.parametrize("view_name", ADMIN_ENDPOINTS_VIEWS)
+async def test_auth_has_no_access(
+    init_db, mock_async_session, async_client: AsyncClient, view_name: str
+):
+    headers = get_headers(await get_auth_user_token(async_client))
+    response = await request(async_client, view_name, headers=headers)
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+
+async def test_auth_has_access_salary_records(
+    init_db,
+    mock_async_session,
+    async_client: AsyncClient,
+):
+    headers = get_headers(await get_auth_user_token(async_client))
+    response = await request(async_client, AUTH_USER_ENDPOINT_VIEW, headers=headers)
+    assert has_access(response)
