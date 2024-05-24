@@ -1,8 +1,9 @@
-import uuid
 from typing import Any
 
 from sqlalchemy import UUID, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+
+from app.types import UUID_DEFAULT, UUID_ID
 
 
 class Base(DeclarativeBase):
@@ -22,10 +23,10 @@ class Base(DeclarativeBase):
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    id: Mapped[uuid.UUID] = mapped_column(
+    id: Mapped[UUID_ID] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
-        default=uuid.uuid4,
+        default=UUID_DEFAULT,
     )
 
     def __repr__(self) -> str:
