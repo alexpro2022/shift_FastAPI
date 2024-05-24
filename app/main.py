@@ -20,7 +20,7 @@ async def create_db_and_tables() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, Any]:
-    await create_db_and_tables()
+    # await create_db_and_tables()
     await create_admin()
     yield
 
