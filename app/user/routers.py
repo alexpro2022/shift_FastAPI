@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.config.app_config import app_conf
 
-from .auth import auth_backend, fastapi_users
+from .auth import admin, auth_backend, fastapi_users
 from .db import user_db
 from .schemas import UserCreate, UserRead, UserUpdate
 
@@ -32,11 +32,10 @@ router.include_router(
 @router.get(
     app_conf.URL_PREFIX.format("user"),
     tags=[TAG_USERS],
-    # dependencies=[Depends(current_superuser)],
-    # response_model=list[schemas.PostResponse],
-    # response_model_exclude_none=True,
+    response_model=list[UserRead],
     summary="Возвращает список всех пользователей.",
     description=app_conf.ADMIN_ONLY,
+    dependencies=[admin],
 )
 async def get_all_users(user_db: user_db):
     return await user_db.get_all()

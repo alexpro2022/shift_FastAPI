@@ -12,7 +12,6 @@ from .base import Base
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    # do really need the O2O relationship here ???
     salary: Mapped["Salary"] = relationship(back_populates="user")
 
     def __repr__(self) -> str:
@@ -28,7 +27,6 @@ class Salary(Base):
     )
     inc_date: Mapped[date | None]
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))  # unique=True
-    # do really need the O2O relationship here ???
     user: Mapped["User"] = relationship(back_populates="salary")
 
     __table_args__ = (UniqueConstraint("user_id"),)

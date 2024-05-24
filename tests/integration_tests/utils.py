@@ -1,7 +1,14 @@
+import uuid
+from http import HTTPStatus
 from typing import Any, Callable, TypeAlias
 
 from deepdiff import DeepDiff
 from fastapi import APIRouter, FastAPI
+from httpx import AsyncClient
+from httpx._types import HeaderTypes
+
+from app.main import app
+from tests.fixtures import data as d
 
 Json: TypeAlias = dict[str, Any]
 callable: TypeAlias = Callable[[Json], str]
@@ -24,3 +31,27 @@ def check_response(
     diff = DeepDiff(response_json, expected_result, ignore_order=True)
     assert not diff, diff
     return "DONE"
+
+
+async def request(
+    async_client: AsyncClient,
+    view_name: str,
+    user_id: uuid.UUID = uuid.uuid4(),
+    headers: HeaderTypes | None = None,
+):
+    if view_name == "update_salary":
+        url = reverse(app, view_name).format(user_id=user_id)
+        response = await async_client.patch(
+            url, json=d.SALARY_UPDATE_DATA, headers=headers
+        )
+    else:
+        url = reverse(app, view_name)
+        response = await async_client.get(url, headers=headers)
+    return response
+
+
+def has_access(response):
+    return response.status_code == HTTPStatus.OK or response.status_code not in (
+        HTTPStatus.FORBIDDEN,
+        HTTPStatus.UNAUTHORIZED,
+    )

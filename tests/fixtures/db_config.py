@@ -5,7 +5,6 @@ from app.config._base import DB_URL_PATTERN, BaseConf
 
 
 class Settings(BaseConf):
-    # defaults needed for GitHub Action tests
     postgres_user_test: str = "postgres"
     postgres_password_test: str = "postgrespw"
     db_host_test: str = "0.0.0.0"

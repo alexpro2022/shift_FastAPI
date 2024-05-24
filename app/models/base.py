@@ -23,7 +23,7 @@ class Base(DeclarativeBase):
         return cls.__name__.lower()
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),  # to remove the redundancy
+        UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
     )
