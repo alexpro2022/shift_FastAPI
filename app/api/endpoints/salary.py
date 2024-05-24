@@ -36,7 +36,7 @@ async def get_all_salaries(session: async_session):
 async def update_salary(
     session: async_session, user_id: uuid.UUID, payload: schemas.SalaryPatch
 ) -> None:
-    salary = await crud.get(
+    salary: Salary = await crud.get(
         session, Salary, exception=True, fetch_one=True, user_id=user_id
     )
     return await crud.update_(session, Salary, salary.id, **payload.model_dump())

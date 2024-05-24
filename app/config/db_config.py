@@ -9,7 +9,7 @@ from app.config._base import DB_URL_PATTERN, BaseConf, SecretStr
 class Settings(BaseConf):
     postgres_user: SecretStr = "postgres"
     postgres_password: SecretStr = "postgrespw"
-    db_host: str = "db"  # database service name in docker-compose.yml
+    db_host: str = "db"
     db_port: SecretStr = "5432"
     db_name: SecretStr = "postgres"
 
