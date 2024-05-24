@@ -44,7 +44,6 @@ async def update_salary(
 
 @router.get(
     "/my_salary",
-    # response_model=schemas.SalaryOut,
     summary="Просмотр зарплаты сотрудником.",
     description=app_conf.AUTH_ONLY,
     responses=get_404("Salary"),

@@ -21,8 +21,8 @@ from tests.utils import db_empty
 )
 async def test_get_all_responses(
     init_db,
-    async_client: AsyncClient,
     admin_user,
+    async_client: AsyncClient,
     view_name: str,
     expected_result: Json,
 ) -> None:
