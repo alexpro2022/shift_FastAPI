@@ -1,4 +1,3 @@
-import uuid
 from datetime import date
 from decimal import Decimal
 
@@ -7,6 +6,7 @@ from sqlalchemy import ForeignKey, Numeric, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.config.app_config import app_conf
+from app.types import UUID_ID
 
 from .base import Base
 
@@ -26,7 +26,7 @@ class Salary(Base):
         Numeric(precision=app_conf.salary_precision, scale=app_conf.salary_scale)
     )
     inc_date: Mapped[date | None]
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("user.id"))  # unique=True
+    user_id: Mapped[UUID_ID] = mapped_column(ForeignKey("user.id"))  # unique=True
     user: Mapped["User"] = relationship(back_populates="salary")
 
     __table_args__ = (UniqueConstraint("user_id"),)

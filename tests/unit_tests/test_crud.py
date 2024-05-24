@@ -1,9 +1,8 @@
-import uuid
-
 import pytest
 from fastapi import HTTPException
 
 from app.repositories import crud
+from app.types import UUID_DEFAULT
 from tests.fixtures.data import DESCR, TITLE, ModelTest
 from tests.utils import check_exception_info_not_found, compare_with_db
 
@@ -30,7 +29,7 @@ async def test_crud_update(get_test_session, create_obj):
 
 async def test_crud_get_or_404_raises_exc(get_test_session):
     with pytest.raises(HTTPException) as exc_info:
-        await crud.get_or_404(get_test_session, ModelTest, uuid.uuid4())
+        await crud.get_or_404(get_test_session, ModelTest, UUID_DEFAULT())
     check_exception_info_not_found(exc_info, crud.MSG_OBJECT_NOT_FOUND)
 
 

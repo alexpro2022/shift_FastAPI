@@ -13,7 +13,6 @@ class Settings(BaseConf):
     salary_precision: int = 8
     salary_scale: int = 2
 
-    # authentication
     secret_key: SecretStr = f"Secret key {DEFAULT_STR}"
     admin_email: EmailStr = "adm@adm.com"
     admin_password: str = "admpw"

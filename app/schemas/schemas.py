@@ -1,10 +1,10 @@
-import uuid
 from datetime import date
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.config.app_config import app_conf
+from app.types import UUID_ID
 
 DECIMAL_VALUE = 10.01
 
@@ -22,5 +22,5 @@ class SalaryPatch(BaseModel):
 
 class SalaryOut(SalaryPatch):
     model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
-    id: uuid.UUID
-    user_id: uuid.UUID
+    id: UUID_ID
+    user_id: UUID_ID

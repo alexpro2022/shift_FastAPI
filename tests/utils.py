@@ -1,10 +1,9 @@
-import uuid
-
 from fastapi import status
 
 # from deepdiff import DeepDiff
 from app.config.app_config import app_conf
 from app.repositories import crud
+from app.types import UUID_ID
 from app.user.db import User
 from tests.fixtures.data import ModelTest
 
@@ -56,7 +55,7 @@ async def compare_with_db(
 ):
     retrieved = await crud.get_or_404(session, ModelTest, obj.id)
     assert isinstance(retrieved, ModelTest)
-    assert isinstance(retrieved.id, uuid.UUID)
+    assert isinstance(retrieved.id, UUID_ID)
     assert retrieved.title == expected_title
     assert retrieved.description == expected_description
     assert obj == retrieved
